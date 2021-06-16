@@ -1,5 +1,5 @@
-# Linears React Router
-React transition component, that can be used easily with [Tailwindcss](https://tailwindcss.com/) 
+# Linears React Transition
+Linears React transition component, that can be used easily with [Tailwindcss](https://tailwindcss.com/) 
 
 # Getting Started
 

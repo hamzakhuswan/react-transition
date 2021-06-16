@@ -6,13 +6,21 @@
   "license": "MIT",
   "main": "./dist/main.js",
   "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linears-io/react-transition.git"
+  },
+  "bugs": {
+    "url": "https://github.com/linears-io/react-transition/issues"
+  },
+  "homepage": "https://github.com/linears-io/react-transition#readme",
   "scripts": {
-    "start": "webpack serve  --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "start": "webpack serve --node-env development --config ./webpack.dev.js",
+    "build": "webpack --node-env production --config ./webpack.prod.js",
+    "prepublishOnly": "yarn run build"
   },
   "peerDependencies": {
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react": ">=16.8.0"
   },
   "devDependencies": {
     "@types/react": "^17.0.11",
