@@ -2,7 +2,7 @@
   "name": "@linears/react-transition",
   "description": "React transition component.",
   "author": "Hamza Khuswan <hamzakhuswan@outlook.com> (https://hamzakhuswan.com)",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "main": "./dist/main.js",
   "types": "./dist/index.d.ts",
