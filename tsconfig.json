@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "module": "esnext",
+        "declaration": true,
+        "sourceMap": true,
+        "strict": true,
+        "moduleResolution": "node",
+        "jsx": "react",
+        "lib": ["DOM"],
+        "target": "es5",
+        "allowJs": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "isolatedModules": true,
+        "outDir": "./dist",
+        "allowSyntheticDefaultImports": true
+      },
+    "include": ["src"],
+    "exclude": [
+        "node_modules"
+    ]
+}

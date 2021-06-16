@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Linears React Transition</title>
+    <style>
+      .transform-0 {
+        transform: translateX(0);
+      }
+      .transform-100 {
+        transform: translateX(100px);
+      }
+      .opacity-0 {
+        opacity: 0;
+      }
+      .opacity-1 {
+        opacity: 1;
+      }
+      .transition-slow {
+        transition: transform 2s linear, opacity 2s linear;
+      }
+      .transition-fast {
+        transition: transform 0.5s linear, opacity 0.5s linear;
+      }
+      .block {
+        display: block;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
