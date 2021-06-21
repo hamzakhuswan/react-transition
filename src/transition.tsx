@@ -1,5 +1,7 @@
-import React, { ComponentProps, ElementType, forwardRef, ReactElement, useCallback, useEffect, useRef, useState } from "react";
+/* eslint-disable react/display-name */
+import React, { ComponentProps, ElementType, forwardRef, useCallback, useEffect, useRef, useState } from "react";
 
+const defaultElement = "div";
 
 export type TransitionProps<E extends ElementType> = {
     active: boolean;
@@ -7,11 +9,12 @@ export type TransitionProps<E extends ElementType> = {
     entered?: string;
     exiting: string;
     exited?: string;
-    as?: E;
+    as?: E | "div";
 } & Omit<ComponentProps<E>, "as">;
 
-const defaultElement = "div";
-function _Transition<E extends ElementType =  typeof defaultElement>({
+export const Transition: <E extends React.ElementType = typeof defaultElement>(
+    props: TransitionProps<E>
+) => React.ReactElement | null = forwardRef(<E extends React.ElementType = typeof defaultElement>({
     children,
     active,
     entering,
@@ -19,30 +22,29 @@ function _Transition<E extends ElementType =  typeof defaultElement>({
     entered,
     exited,
     className,
-    as,
+    as: Component = "div",
     ...rest
-}: TransitionProps<E>, ref: typeof rest.ref): ReactElement {
+}: TransitionProps<E>, ref: typeof rest.ref) => {
     const [transition, setTransition] = useState(false);
     const [localOpen, setLocalOpen] = useState(active);
-    const elementRef = useRef<HTMLDivElement>(null);
+    const elementRef = useRef(null);
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
     const isInitialMount = useRef(true);
-    const close  = useCallback(() => {
+    const close = useCallback(() => {
         setLocalOpen(false);
     }, []);
-
     
     useEffect(() => {
-        rest;    
         
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
         
         const element = ref?.current || elementRef?.current;
         element?.removeEventListener("transitionend", close);
-
+        
         if (isInitialMount.current) isInitialMount.current = false;
         else {
             if (active) {
+                
                 setLocalOpen(true);
                 // Using two request animations to avoid bugs in some browsers
                 requestAnimationFrame(() => {
@@ -60,12 +62,8 @@ function _Transition<E extends ElementType =  typeof defaultElement>({
         };
     }, [active]);
 
-    const Component = as || defaultElement;
-
-    return <Component {...rest} className={`${className ?? ""} ${transition ? entering : exiting} ${(localOpen ? entered : exited) ?? ""}`} 
-        ref={ref ||elementRef} >
+    return <Component {...rest} className={`${className ?? ""} ${transition ? entering : exiting} ${(localOpen ? entered : exited) ?? ""}`}
+        ref={ref || elementRef} >
         {children}
     </Component>;
-}
-
-export const Transition = forwardRef( _Transition);
+});
