@@ -1,5 +1,5 @@
 import { Transition } from "@linears/react-transition";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 
 function Example1() {
@@ -43,12 +43,41 @@ function Example2() {
         </div>
     );
 }
+function Example3() {
+    const uListRef = useRef<HTMLUListElement>(null);
+    const [open, setOpen] = useState(false);
+    useEffect(()=> {
+        if (open) uListRef.current.focus();
+    }, [open]);
+
+    return (
+        <div>
+            <h1>Example 3</h1>
+            <button onClick={() => setOpen(!open)}>Toggle Transition</button>
+            <Transition
+                as="ul"
+                tabIndex={-1}
+                active={open}
+                entering="opacity-1 transition-slow"
+                entered="block"
+                exiting="opacity-0 transition-slow"
+                exited="hidden"
+                ref={uListRef}
+            >
+                <li>One</li>
+                <li>Two</li>
+                <li>Three</li>
+            </Transition>
+        </div>
+    );
+}
 
 function App() {
     return (
         <div>
             <Example1 />
             <Example2 />
+            <Example3 />
         </div>
     );
 }

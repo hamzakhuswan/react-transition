@@ -1,15 +1,17 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-export interface TransitionProps extends React.HTMLProps<HTMLDivElement> {
-  children: React.ReactElement | string;
-  active: boolean;
-  className?: string;
-  entering: string;
-  entered?: string;
-  exiting: string;
-  exited?: string;
-}
+import React, { ComponentProps, ElementType, forwardRef, ReactElement, useCallback, useEffect, useRef, useState } from "react";
 
-export function Transition({
+
+export type TransitionProps<E extends ElementType> = {
+    active: boolean;
+    entering: string;
+    entered?: string;
+    exiting: string;
+    exited?: string;
+    as?: E;
+} & Omit<ComponentProps<E>, "as">;
+
+const defaultElement = "div";
+function _Transition<E extends ElementType =  typeof defaultElement>({
     children,
     active,
     entering,
@@ -17,8 +19,9 @@ export function Transition({
     entered,
     exited,
     className,
+    as,
     ...rest
-}: TransitionProps): React.ReactElement {
+}: TransitionProps<E>, ref: typeof rest.ref): ReactElement {
     const [transition, setTransition] = useState(false);
     const [localOpen, setLocalOpen] = useState(active);
     const elementRef = useRef<HTMLDivElement>(null);
@@ -27,10 +30,15 @@ export function Transition({
     const close  = useCallback(() => {
         setLocalOpen(false);
     }, []);
-    useEffect(() => {
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
     
-        elementRef.current?.removeEventListener("transitionend", close);
+    useEffect(() => {
+        rest;    
+        
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        
+        const element = ref?.current || elementRef?.current;
+        element?.removeEventListener("transitionend", close);
 
         if (isInitialMount.current) isInitialMount.current = false;
         else {
@@ -44,16 +52,20 @@ export function Transition({
                 });
             } else {
                 setTransition(false);
-                elementRef.current?.addEventListener("transitionend", close);
+                element?.addEventListener("transitionend", close);
             }
         }
         return () => {
-            elementRef.current?.removeEventListener("transitionend", close);
+            element?.removeEventListener("transitionend", close);
         };
     }, [active]);
 
-    return( <div {...rest} className={`${className ?? ""} ${transition ? entering : exiting} ${(localOpen ? entered : exited) ?? ""}`} 
-        ref={elementRef}>
+    const Component = as || defaultElement;
+
+    return <Component {...rest} className={`${className ?? ""} ${transition ? entering : exiting} ${(localOpen ? entered : exited) ?? ""}`} 
+        ref={ref ||elementRef} >
         {children}
-    </div>);
+    </Component>;
 }
+
+export const Transition = forwardRef( _Transition);
